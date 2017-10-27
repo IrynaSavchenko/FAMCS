@@ -1,2 +1,2 @@
 # FAMCS
-University programming assignments 🍊
+University programming assignments
