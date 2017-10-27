@@ -1,8 +1,0 @@
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\bin\Debug\Iism_3.exe.config
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\bin\Debug\Iism_3.exe
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\bin\Debug\Iism_3.pdb
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\obj\Debug\Iism_3.csprojResolveAssemblyReference.cache
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\obj\Debug\Iism_3.exe
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\obj\Debug\Iism_3.pdb
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\bin\Debug\Meta.Numerics.dll
-D:\Programming\Course4\Иисм\MyLabs\Iism_3\Iism_3\bin\Debug\Meta.Numerics.xml
