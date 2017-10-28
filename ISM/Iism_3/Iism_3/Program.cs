@@ -6,6 +6,7 @@ namespace Iism_3
     class Program
     {
         private const int N = 1000;
+        private const int NumberOfPirsonIntervals = 40;
         private const double KolmogorovLimit = 1.36;
         private const double PirsonLimit = 1073.643; //ХИ2ОБР(0,05; 999)
 
@@ -36,11 +37,11 @@ namespace Iism_3
                     int j = 0;
                     foreach (BaseDistribuionRule distribution in distrArr)
                     {
-                        //file.WriteLine(distrNamesArr[j]);
+                        file.WriteLine(distrNamesArr[j]);
                         PerformOperations(distribution, j++, file);
                     }
-                    //file.WriteLine();
-                    //file.WriteLine();
+                    file.WriteLine();
+                    file.WriteLine();
                 }
 
                 file.WriteLine("===============================================");
@@ -59,23 +60,23 @@ namespace Iism_3
 
         private static void PerformOperations(BaseDistribuionRule distribution, int distrIndex, StreamWriter file)
         {
-            //file.WriteLine(distribution.TrueMathExpectation == null ? 
-            //    "No math expectation" : 
-            //    $"Math exp: calc = {distribution.MathExpectation}; real = {distribution.TrueMathExpectation}");
+            file.WriteLine(distribution.TrueMathExpectation == null ?
+                "No math expectation" :
+                $"Math exp: calc = {distribution.MathExpectation}; real = {distribution.TrueMathExpectation}");
 
-            //file.WriteLine(distribution.TrueDispersion == null ?
-            //    "No dispersion" :
-            //    $"Dispersion exp: calc = {distribution.Dispersion}; real = {distribution.TrueDispersion}");
+            file.WriteLine(distribution.TrueDispersion == null ?
+                "No dispersion" :
+                $"Dispersion exp: calc = {distribution.Dispersion}; real = {distribution.TrueDispersion}");
 
             bool isCorrectByKolmogorov = IsCorrectByKolmogorov(distribution);
-            //file.WriteLine($"Kolmogorov correct: {isCorrectByKolmogorov}");
+            file.WriteLine($"Kolmogorov correct: {isCorrectByKolmogorov}");
             if(isCorrectByKolmogorov)
             {
                 kolmogorovCorrectArray[distrIndex]++;
             }
 
             bool isCorrectByPirson = IsCorrectByPirson(distribution);
-            //file.WriteLine($"Pirson correct: {isCorrectByPirson}");
+            file.WriteLine($"Pirson correct: {isCorrectByPirson}");
             if (isCorrectByPirson)
             {
                 pirsonCorrectArray[distrIndex]++;
@@ -115,61 +116,72 @@ namespace Iism_3
             Array.Sort(values);
 
             int K = 31;
-            //int moreK = 39;
-            double step = (values[N - 1] - values[0]) / (double) K;
-
-            double range = step * 4;
+            double step = (values[N - 1] - values[0]) / K;
 
             int[] frequences = new int[K];
-            for (int j = 0; j < N; j++)
-                {
-                    if (values[j] > values[N - 1] - range && values[j] <= values[N - 1])
-                    {
-                        frequences[K - 1]++;
-                    }
-                }
+            frequences[0] = 1;
 
-            for (int j = 0; j < N; j++)
-            {
-                if (values[j] > values[0] && values[j] <= values[0] + range)
-                {
-                    frequences[0]++;
-                }
-            }
-
-            //int[] frequences = new int[K];
-            //frequences[0] = 1;
             double prev = values[0];
-            for(int i = 4; i < K - 4; i++)
+            for (int i = 0; i < K; i++)
             {
                 double next = prev + step;
-                for(int j = 0; j < N; j++)
+                for (int j = 0; j < N; j++)
                 {
-                    if(values[j] > prev && values[j] <= next)
+                    if (values[j] > prev && values[j] <= next)
                     {
                         frequences[i]++;
                     }
                 }
                 prev += step;
             }
-            K = 25;
+
             double[] p = new double[K];
             prev = values[0];
-            for(int i = 1; i <= K; i++)
+            for (int i = 1; i <= K; i++)
             {
                 double current = prev + step;
-                p[i - 1] = distribution.CalculateDistributionFunction(current) - 
+                p[i - 1] = distribution.CalculateDistributionFunction(current) -
                     distribution.CalculateDistributionFunction(prev);
                 prev += step;
             }
 
             double hi2 = 0.0;
-            for(int i = 0; i < K; i++)
+            for (int i = 0; i < K; i++)
             {
                 hi2 += Math.Pow(frequences[i] - N * p[i], 2) / (N * p[i]);
             }
+            //===================== Gives 100% always ===================
 
+            /*int numberOfValuesInInterval = N / NumberOfPirsonIntervals;
+            double[] bounds = GetArrayOfBounds(values, numberOfValuesInInterval);
+
+            double[] p = new double[NumberOfPirsonIntervals];
+            double prev = values[0];
+            for (int i = 1; i <= NumberOfPirsonIntervals; i++)
+            {
+                double current = bounds[i - 1];
+                p[i - 1] = distribution.CalculateDistributionFunction(current) -
+                    distribution.CalculateDistributionFunction(prev);
+                prev = current;
+            }
+
+            double hi2 = 0.0;
+            for (int i = 0; i < NumberOfPirsonIntervals; i++)
+            {
+                hi2 += Math.Pow(numberOfValuesInInterval - N * p[i], 2) / (N * p[i]);
+            }*/
             return hi2 < PirsonLimit ? true : false;
+        }
+
+        private static double[] GetArrayOfBounds(double[] values, int numberOfValuesInInterval)
+        {
+            double[] bounds = new double[NumberOfPirsonIntervals];
+
+            for(int i = numberOfValuesInInterval, j = 0; j < NumberOfPirsonIntervals; j++, i += numberOfValuesInInterval)
+            {
+                bounds[j] = values[i - 1];
+            }
+            return bounds;
         }
     }
 }

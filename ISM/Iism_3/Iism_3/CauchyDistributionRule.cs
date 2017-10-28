@@ -18,10 +18,7 @@ namespace Iism_3
         {
             for (int i = 0; i < N; i++)
             {
-                //double x = GetRandomInRange(-1, 1);
-                double y = GetRandomInRange(0, 1);
-
-                Values[i] = m + c * Math.Tan(Math.PI * (y - 0.5));
+                Values[i] = m + c * Math.Tan(Math.PI * (RandObj.NextDouble() - 0.5));
             }
         }
 
@@ -48,11 +45,6 @@ namespace Iism_3
         public override double CalculateDistributionFunction(double x)
         {
             return 0.5 + Math.Atan((x - m) / c) / Math.PI;
-        }
-
-        private double GetRandomInRange(double minimum, double maximum)
-        {
-            return RandObj.NextDouble() * (maximum - minimum) + minimum;
         }
     }
 }
