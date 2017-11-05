@@ -8,7 +8,8 @@ namespace Iism_3
         private const int N = 1000;
         private const int NumberOfPirsonIntervals = 40;
         private const double KolmogorovLimit = 1.36;
-        private const double PirsonLimit = 1073.643; //ХИ2ОБР(0,05; 999)
+        //private const double PirsonLimit = 1073.643; //ХИ2ОБР(0,05; 999)
+        private const double PirsonLimit = 54.57222776; //ХИ2ОБР(0,05; 39)
 
         private static int[] kolmogorovCorrectArray = new int[3];
         private static int[] pirsonCorrectArray = new int[3];
@@ -115,44 +116,50 @@ namespace Iism_3
             double[] values = distribution.ValuesArr;
             Array.Sort(values);
 
-            int K = 31;
-            double step = (values[N - 1] - values[0]) / K;
+            //int K = 31;
+            //double step = (values[N - 1] - values[0]) / K;
 
-            int[] frequences = new int[K];
-            frequences[0] = 1;
+            //int[] frequences = new int[K];
 
-            double prev = values[0];
-            for (int i = 0; i < K; i++)
-            {
-                double next = prev + step;
-                for (int j = 0; j < N; j++)
-                {
-                    if (values[j] > prev && values[j] <= next)
-                    {
-                        frequences[i]++;
-                    }
-                }
-                prev += step;
-            }
+            //for (int i = 0; i < N; i++)
+            //{
+            //    if (values[i] != values[0])
+            //        break;
+            //    frequences[0]++;
+            //}
 
-            double[] p = new double[K];
-            prev = values[0];
-            for (int i = 1; i <= K; i++)
-            {
-                double current = prev + step;
-                p[i - 1] = distribution.CalculateDistributionFunction(current) -
-                    distribution.CalculateDistributionFunction(prev);
-                prev += step;
-            }
+            //double prev = values[0];
+            //for (int i = 0; i < K; i++)
+            //{
+            //    double next = prev + step;
+            //    for (int j = 0; j < N; j++)
+            //    {
+            //        if (values[j] > prev && values[j] <= next)
+            //        {
+            //            frequences[i]++;
+            //        }
+            //    }
+            //    prev += step;
+            //}
 
-            double hi2 = 0.0;
-            for (int i = 0; i < K; i++)
-            {
-                hi2 += Math.Pow(frequences[i] - N * p[i], 2) / (N * p[i]);
-            }
+            //double[] p = new double[K];
+            //prev = values[0];
+            //for (int i = 1; i <= K; i++)
+            //{
+            //    double current = prev + step;
+            //    p[i - 1] = distribution.CalculateDistributionFunction(current) -
+            //        distribution.CalculateDistributionFunction(prev);
+            //    prev += step;
+            //}
+
+            //double hi2 = 0.0;
+            //for (int i = 0; i < K; i++)
+            //{
+            //    hi2 += Math.Pow(frequences[i] - N * p[i], 2) / (N * p[i]);
+            //}
             //===================== Gives 100% always ===================
 
-            /*int numberOfValuesInInterval = N / NumberOfPirsonIntervals;
+            int numberOfValuesInInterval = N / NumberOfPirsonIntervals;
             double[] bounds = GetArrayOfBounds(values, numberOfValuesInInterval);
 
             double[] p = new double[NumberOfPirsonIntervals];
@@ -169,7 +176,7 @@ namespace Iism_3
             for (int i = 0; i < NumberOfPirsonIntervals; i++)
             {
                 hi2 += Math.Pow(numberOfValuesInInterval - N * p[i], 2) / (N * p[i]);
-            }*/
+            }
             return hi2 < PirsonLimit ? true : false;
         }
 
